@@ -1,6 +1,6 @@
 const express = require('express');
 const chalk = require('chalk');
-const debug = require('debug');
+const debug = require('debug')('app');
 const morgan = require('morgan');
 const path = require('path');
 
@@ -17,21 +17,29 @@ app.set('views', './src/views');
 // app.set('view engine', 'pug');
 app.set('view engine', 'ejs');
 
-const bookRouter = require('./src/routes/bookRoutes.js');
+const cytricRouter = require('./src/routes/cytricRoutes.js');
+
+app.use('/cytric', cytricRouter);
+
+const nav = [
+  { link: '/books', title: 'Book' },
+  { link: '/authors', title: 'Author' }
+];
+
+const bookRouter = require('./src/routes/bookRoutes.js')(nav);
 
 app.use('/books', bookRouter);
 app.get('/', (req, res) => {
   // res.sendFile(path.join(__dirname, '/views/', '/index.html'));
 
   /* Pug example */
-  // res.render('index', { list: ['a', 'b'] }); 
+  // res.render('index', { list: ['a', 'b'] });
 
   /* EJS example */
   res.render(
     'index',
     {
-      nav: [{ link: '/books', title: 'Books' },
-        { link: '/authors', title: 'Authors' }],
+      nav,
       title: 'Library'
     }
   );
