@@ -3,10 +3,37 @@ const chalk = require('chalk');
 const debug = require('debug')('app');
 const morgan = require('morgan');
 const path = require('path');
+const sql = require('mssql');
+const Sequelize = require('sequelize');
 
 const app = express();
 const port = process.env.PORT || 3000;
 
+const sequelize = new Sequelize('PSLibrary', 'library', 'Abcd1234', {
+  host: 'pslibrary-andrew.database.windows.net',
+  dialect: 'mssql',
+
+  pool: {
+    max: 5,
+    min: 0,
+    acquire: 30000,
+    idle: 10000
+  },
+
+  operatorsAliases: false,
+  dialectOptions: {
+    encrypt: true // Use this if you're on Azure
+  }
+});
+
+sequelize
+  .authenticate()
+  .then(() => {
+    console.log('Connection has been established successfully');
+  })
+  .catch((err) => {
+    console.error('Unable to connect to the database:', err);
+  });
 
 app.use(morgan('tiny'));
 app.use(express.static(path.join(__dirname, '/public/')));
