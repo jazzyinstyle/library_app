@@ -3,48 +3,33 @@ const chalk = require('chalk');
 const debug = require('debug')('app');
 const morgan = require('morgan');
 const path = require('path');
-const sql = require('mssql');
-const Sequelize = require('sequelize');
+const bodyParser = require('body-parser');
+const models = require('./app/models');
 
 const app = express();
 const port = process.env.PORT || 3000;
 
-const sequelize = new Sequelize('PSLibrary', 'library', 'Abcd1234', {
-  host: 'pslibrary-andrew.database.windows.net',
-  dialect: 'mssql',
-
-  pool: {
-    max: 5,
-    min: 0,
-    acquire: 30000,
-    idle: 10000
-  },
-
-  operatorsAliases: false,
-  dialectOptions: {
-    encrypt: true // Use this if you're on Azure
-  }
-});
-
-sequelize
+models.sequelize
   .authenticate()
   .then(() => {
-    console.log('Connection has been established successfully');
+    debug('Connection has been established successfully');
   })
   .catch((err) => {
-    console.error('Unable to connect to the database:', err);
+    debug('Unable to connect to the database:', err);
   });
 
 app.use(morgan('tiny'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, '/public/')));
 app.use('/css', express.static(path.join(__dirname, '/node_modules/bootstrap/dist/css')));
 app.use('/js', express.static(path.join(__dirname, '/node_modules/bootstrap/dist/js')));
 app.use('/js', express.static(path.join(__dirname, '/node_modules/jquery/dist')));
-app.set('views', './src/views');
+app.set('views', './app/views/public');
 // app.set('view engine', 'pug');
 app.set('view engine', 'ejs');
 
-const cytricRouter = require('./src/routes/cytricRoutes.js');
+const cytricRouter = require('./app/routes/cytricRoutes');
 
 app.use('/cytric', cytricRouter);
 
@@ -53,9 +38,14 @@ const nav = [
   { link: '/authors', title: 'Author' }
 ];
 
-const bookRouter = require('./src/routes/bookRoutes.js')(nav);
+const bookRouter = require('./app/routes/bookRoutes')(nav);
+const adminRouter = require('./app/routes/adminRoutes');
+const authRouter = require('./app/routes/authRoutes');
 
 app.use('/books', bookRouter);
+app.use('/admin', adminRouter);
+app.use('/auth', authRouter);
+
 app.get('/', (req, res) => {
   // res.sendFile(path.join(__dirname, '/views/', '/index.html'));
 
@@ -73,5 +63,5 @@ app.get('/', (req, res) => {
 });
 
 app.listen(port, () => {
-  debug(`Listening on port ${chalk.green('3000')}`);
+  debug(`Listening on port ${chalk.green(port)}`);
 });

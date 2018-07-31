@@ -1,0 +1,59 @@
+{
+  "development": {
+    "username": "library",
+    "password": "Abcd1234",
+    "database": "PSLibrary",
+    "host": "pslibrary-andrew.database.windows.net",
+    "dialect": "mssql",
+
+    "pool": {
+      "max": 5,
+      "min": 0,
+      "acquire": 30000,
+      "idle": 10000
+    },
+
+    "operatorsAliases": false,
+    "dialectOptions": {
+      "encrypt": true
+    }
+  },
+  "test": {
+    "username": "root",
+    "password": null,
+    "database": "database_test",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+
+    "pool": {
+      "max": 5,
+      "min": 0,
+      "acquire": 30000,
+      "idle": 10000
+    },
+
+    "operatorsAliases": false,
+    "dialectOptions": {
+      "encrypt": true
+    }
+  },
+  "production": {
+    "username": "root",
+    "password": null,
+    "database": "database_production",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+
+    "pool": {
+      "max": 5,
+      "min": 0,
+      "acquire": 30000,
+      "idle": 10000
+    },
+
+    "operatorsAliases": false,
+    "dialectOptions": {
+      "encrypt": true
+    }
+  }
+}
