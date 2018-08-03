@@ -4,24 +4,30 @@ const debug = require('debug')('app');
 const morgan = require('morgan');
 const path = require('path');
 const bodyParser = require('body-parser');
+const session = require('express-session');
 const models = require('./app/models');
 
 const app = express();
 const port = process.env.PORT || 3000;
 
-models.sequelize
-  .authenticate()
-  .then(() => {
-    debug('Connection has been established successfully');
-  })
-  .catch((err) => {
-    debug('Unable to connect to the database:', err);
-  });
+// Sequelize connect to Azure MSSql
+// models.sequelize
+//   .authenticate()
+//   .then(() => {
+//     debug('Connection has been established successfully');
+//   })
+//   .catch((err) => {
+//     debug('Unable to connect to the database:', err);
+//   });
 
 app.use(morgan('tiny'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(session({ secret: 'library' }));
 app.use(express.static(path.join(__dirname, '/public/')));
+
+require('./config/passport')(app);
+
 app.use('/css', express.static(path.join(__dirname, '/node_modules/bootstrap/dist/css')));
 app.use('/js', express.static(path.join(__dirname, '/node_modules/bootstrap/dist/js')));
 app.use('/js', express.static(path.join(__dirname, '/node_modules/jquery/dist')));
@@ -40,7 +46,7 @@ const nav = [
 
 const bookRouter = require('./app/routes/bookRoutes')(nav);
 const adminRouter = require('./app/routes/adminRoutes');
-const authRouter = require('./app/routes/authRoutes');
+const authRouter = require('./app/routes/authRoutes')(nav);
 
 app.use('/books', bookRouter);
 app.use('/admin', adminRouter);

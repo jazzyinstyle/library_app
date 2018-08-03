@@ -16,7 +16,9 @@
     "operatorsAliases": false,
     "dialectOptions": {
       "encrypt": true
-    }
+    },
+
+    "goodReadApiKey": "eaWNrZK6bW394uGq7v8xQ"
   },
   "test": {
     "username": "root",
@@ -35,7 +37,9 @@
     "operatorsAliases": false,
     "dialectOptions": {
       "encrypt": true
-    }
+    },
+
+    "goodReadApiKey": "eaWNrZK6bW394uGq7v8xQ"
   },
   "production": {
     "username": "root",
@@ -54,6 +58,8 @@
     "operatorsAliases": false,
     "dialectOptions": {
       "encrypt": true
-    }
+    },
+
+    "goodReadApiKey": "eaWNrZK6bW394uGq7v8xQ"
   }
 }
