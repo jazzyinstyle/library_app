@@ -1,24 +1,34 @@
-const { MongoClient, ObjectID } = require('mongodb');
+const { MongoClient } = require('mongodb');
 const debug = require('debug')('app:bookController');
 
 function bookController(bookService, nav) {
+  let title;
+
+  function setTitle(inTitle) {
+    this.title = inTitle;
+  }
+
   function postByKey(req, res) {
     const { searchKey } = req.body;
     (async function query() {
-      const books = await bookService.getByKey(searchKey);
+      try {
+        const books = await bookService.getByKey(searchKey);
 
-      debug('Length = ', books.length);
-      // debug('ID = ', JSON.stringify(books[0].best_book.id));
-      debug('ID = ', JSON.stringify(books[0].best_book.id._));
+        debug('Length = ', books.length);
+        // debug('ID = ', JSON.stringify(books[0].best_book.id));
+        debug('ID = ', JSON.stringify(books[0].best_book.id._));
 
-      res.render(
-        'bookListView',
-        {
-          nav,
-          title: 'Library',
-          books
-        }
-      );
+        res.render(
+          'bookListView',
+          {
+            nav,
+            title,
+            books
+          }
+        );
+      } catch (error) {
+        res.send(error);
+      }
     }());
   }
 
@@ -43,7 +53,7 @@ function bookController(bookService, nav) {
           'bookListView',
           {
             nav,
-            title: 'Library',
+            title,
             // books: result[0] // this is for MSSql
             books
           }
@@ -72,7 +82,7 @@ function bookController(bookService, nav) {
         'bookView',
         {
           nav,
-          title: 'Library',
+          title,
           book
         }
       );
@@ -118,7 +128,8 @@ function bookController(bookService, nav) {
     postByKey,
     getIndex,
     getById,
-    middleware
+    middleware,
+    setTitle
   };
 }
 

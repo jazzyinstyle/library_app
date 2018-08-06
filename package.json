@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha app/test/**/*.spec.js",
     "start": "set DEBUG=app,app:* & nodemon node app.js",
     "lint": "eslint app.js --fix"
   },
@@ -14,12 +14,15 @@
     "axios": "0.18.0",
     "body-parser": "1.18.3",
     "bootstrap": "4.1.1",
+    "chai": "4.1.2",
+    "chai-as-promised": "7.1.1",
     "chalk": "2.4.1",
     "debug": "3.1.0",
     "ejs": "2.6.1",
     "express": "^4.16.3",
     "express-session": "1.15.6",
     "jquery": "3.3.1",
+    "mocha": "5.2.0",
     "mongodb": "3.1.1",
     "morgan": "1.9.0",
     "mssql": "4.1.0",
@@ -29,6 +32,7 @@
     "pug": "2.0.3",
     "request": "2.87.0",
     "sequelize": "4.38.0",
+    "sinon": "6.1.4",
     "tedious": "2.6.3",
     "xml2js": "0.4.19"
   },

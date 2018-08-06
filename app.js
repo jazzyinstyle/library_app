@@ -47,10 +47,12 @@ const nav = [
 const bookRouter = require('./app/routes/bookRoutes')(nav);
 const adminRouter = require('./app/routes/adminRoutes');
 const authRouter = require('./app/routes/authRoutes')(nav);
+const gitRouter = require('./app/routes/gitRoutes')();
 
 app.use('/books', bookRouter);
 app.use('/admin', adminRouter);
 app.use('/auth', authRouter);
+app.use('/git', gitRouter);
 
 app.get('/', (req, res) => {
   // res.sendFile(path.join(__dirname, '/views/', '/index.html'));
